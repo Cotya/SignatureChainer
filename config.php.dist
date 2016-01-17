@@ -7,7 +7,7 @@
  */
 
 return [
-    'userAgent' => 'Your Github Username', //should be Github Username
+    'userAgent' => 'Your Github Username - Cotya/SignatureChainer', //should be Github Username + name/url of the application
     'githubApiToken' => '~~~~~~~~', //there belongs a token you have to generate yourself
     'storageKey' => 'random_001', //please fill unique key
 ];

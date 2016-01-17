@@ -13,6 +13,7 @@ use Symfony\Component\Process\Process;
 
 class Client
 {
+    use Traits\Guzzle;
     /**
      * @var GuzzleHttp\Client
      */
@@ -27,13 +28,7 @@ class Client
         $this->userAgent = $userAgent;
         $this->githubApiToken = $githubApiToken;
 
-        $this->httpClient = new GuzzleHttp\Client([
-            'defaults' => ['debug' => true],
-            
-            'headers' => [
-                'User-Agent' => $this->userAgent,
-            ],
-        ]);
+        $this->instantiateDefaultGuzzleHttp($this->userAgent);
     }
     
     protected function fetchUrl($url){

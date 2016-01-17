@@ -157,5 +157,6 @@ $console
         $output->writeln('command finished');
     });
 
+require __DIR__ . '/console/packagist.php';
 
 $console->run();
