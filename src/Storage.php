@@ -68,7 +68,8 @@ class Storage
         );
         $result = [];
         foreach (glob($directory.'/*.json') as $file) {
-            $result[] = SignatureStruct::jsonDesserialize(file_get_contents($file));
+            $json = json_decode(file_get_contents($file), true);
+            $result[] = SignatureStruct::jsonDesserialize($json);
         }
         return $result;
     }

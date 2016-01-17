@@ -83,4 +83,52 @@ class Client
         //file_put_contents('test_archive.zip.asc', $process->getOutput());
         return $signatureStruct;
     }
+    
+    public function downloadPackageWithValidation(SignatureStruct $signatureStruct)
+    {
+        $result = $this->fetchUrl($signatureStruct->getDownloadUrl());
+        $fileContent = $result->getBody()->getContents();
+        $sha256 = hash('sha256', $fileContent);
+        if ($sha256 !== $signatureStruct->getSha256()) {
+            throw new \Exception(
+                "sha256 hash does not match. download has '$sha256', storage has '{$signatureStruct->getSha256()}'"
+            );
+        }
+        $gpg = new \gnupg();
+        $result = $gpg->verify($fileContent, $signatureStruct->getSignature());
+        var_dump($result);
+        if ($result !== false) {
+            echo "\nResult is not false, so signature seems to be valid\n";
+
+            $keyinfo = $gpg->keyinfo($result[0]['fingerprint'])[0];
+            
+            
+            var_dump($keyinfo['uids'][0]);
+            
+            if ($keyinfo['disabled'] || $keyinfo['expired'] || $keyinfo['revoked']) {
+                echo PHP_EOL.'WARNING';
+                echo PHP_EOL.'$keyinfo[\'disabled\'] || $keyinfo[\'expired\'] || $keyinfo[\'revoked\']'.PHP_EOL.PHP_EOL;
+            }
+            
+        } else {
+            echo "\n################## ERROR ################\nomething went wrong\n";
+        }
+        /*
+        $process = new Process('gpg --verify --batch -a');
+        $process->setInput(
+            "-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+".
+            $fileContent.
+            PHP_EOL.
+            $signatureStruct->getSignature()
+        );
+        $process->run();
+        $error = $process->getErrorOutput();
+        $output = $process->getOutput();
+        echo $error;
+        echo $output;
+        */
+    }
 }

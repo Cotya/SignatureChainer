@@ -157,6 +157,28 @@ $console
         $output->writeln('command finished');
     });
 
+$console
+    ->register('validate-package')
+    ->setDefinition(array(
+        new InputArgument('dir', InputArgument::REQUIRED, 'Directory name'),
+        new InputArgument('name', InputArgument::REQUIRED, 'package name'),
+        new InputArgument('version', InputArgument::REQUIRED, 'package version'),
+    ))
+    ->setDescription('Displays the files in the given directory')
+    ->setCode(function (InputInterface $input, OutputInterface $output) use ($config)  {
+        $dir = $input->getArgument('dir');
+        $name = $input->getArgument('name');
+        $version = $input->getArgument('version');
+        $client = new \Cotya\SignatureChainer\Client($config['userAgent'], $config['githubApiToken']);
+        $storage = new \Cotya\SignatureChainer\Storage($dir.'/signatures');
+        
+        $signatures = $storage->getSignaturesForPackageByNameAndVersion($name, $version);
+
+        $client->downloadPackageWithValidation($signatures[0]);
+
+        $output->writeln('command finished');
+    });
+
 require __DIR__ . '/console/packagist.php';
 
 $console->run();
