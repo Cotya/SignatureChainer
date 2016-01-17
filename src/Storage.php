@@ -72,4 +72,13 @@ class Storage
         }
         return $result;
     }
+    
+    public function doesSignatureExist($packageName, $version, $storageKey)
+    {
+        $directory = $this->getDirectoryByPackageNameAndVersion(
+            $packageName,
+            $version
+        );
+        return file_exists($directory.'/'.$storageKey.'.json');
+    }
 }

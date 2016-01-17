@@ -47,6 +47,14 @@ $console
                 var_dump($dist);
                 continue;
             }
+            if ($storage->doesSignatureExist(
+                $packages->getName(),
+                $version->getVersionNormalized(),
+                $config['storageKey']
+            )) {
+                $output->writeln('Signature already exists for version: '.$version->getVersionNormalized());
+                continue;
+            }
             try {
                 $signatureStruct = $SignatureClient->processUrl($dist->getUrl());
                 $signatureStruct->setPackageName($packages->getName());
