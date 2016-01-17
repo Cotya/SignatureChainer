@@ -1,0 +1,21 @@
+{
+  "name": "Cotya/SignatureChainer",
+  "description": "a tool to create signatures and chain them into a signed Git repository",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {"Cotya\\SignatureChainer\\": "src/"}
+  },
+  "authors": [
+    {
+      "name": "Flyingmana",
+      "email": "flyingmana@googlemail.com"
+    }
+  ],
+  "require": {
+    "symfony/console": "^3.0",
+    "symfony/process": "^3.0",
+    "psr/log": "^1.0",
+    "guzzlehttp/guzzle": "^6.1"
+  }
+}
